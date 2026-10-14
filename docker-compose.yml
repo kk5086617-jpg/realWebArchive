@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    container_name: webarchive-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
