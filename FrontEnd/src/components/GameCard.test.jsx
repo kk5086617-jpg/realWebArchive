@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import GameCard from './GameCard'
 
 const mockGame = {
@@ -26,11 +25,11 @@ describe('GameCard', () => {
     expect(screen.getByText('12441')).toBeInTheDocument()
   })
 
-  it('вызывает onOpen с id при клике', async () => {
-    const onOpen = vi.fn()
-    render(<GameCard game={mockGame} onOpen={onOpen} />)
-
-    await userEvent.click(screen.getByText('Snail Bob 3'))
-    expect(onOpen).toHaveBeenCalledWith(1)
+  it('открывает страницу игры в отдельной вкладке', () => {
+    render(<GameCard game={mockGame} />)
+    const link = screen.getByRole('link')
+    expect(link).toHaveAttribute('href', '/game/1')
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 })

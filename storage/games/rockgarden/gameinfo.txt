@@ -1,0 +1,18 @@
+Name:		Rock Garden Deluxe
+Developer:	Flipline Studios
+Size:		640 x 480
+Screenshots:	http://www.flipline.com/games/rockgarden/screenshots.html
+Category:	Puzzle
+
+Version: 	2.0
+Updated: 	03/11/14
+Includes: 	Major Bug fixes and removal of all Mochi Ads
+
+Description:
+Arrange the stones in your backyard!  Play through over 100 levels in this stone-matching puzzler, each with its own unique layout, environment, and collectible stone.  This new "Deluxe" version now includes all of the features and content available in the download version!  Two game modes are available: the Classic Game and Random Mode offering endless play. Players can earn over 100 collectible stones in the Classic Game, which can appear in the Random games and in the custom Gardens that players create themselves.
+
+Instructions:
+Click and drag stones to slide them across the garden.  Stones will keep sliding until they hit a wall, obstacle, or another stone.  Match five stones of the same color to flip them over, and flip all of the stones to complete the level.  Earn large collectible stones by beating High Scores.
+
+
+

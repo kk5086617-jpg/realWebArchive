@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom'
 import { Send, Mail, Phone, Menu, X } from 'lucide-react'
 import './style.css'
 import ArchivePage from './components/ArchivePage'
+import GamePage from './components/GamePage'
 
 const navItems = ['[ ENTER ]', 'ARCHIVE', 'PROFILE', 'SUBMIT', 'CHAT_VOID']
 
-function App() {
+function AppLayout() {
   const [active, setActive] = useState('ARCHIVE')
   const [mobileOpen, setMobileOpen] = useState(false)
+  
+  const location = useLocation()
+  // Если путь начинается с /game, мы скрываем кнопки навигации
+  const isGamePage = location.pathname.startsWith('/game')
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white selection:bg-white selection:text-black">
+    <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white selection:bg-white selection:text-black flex flex-col">
       <div className="star-field" aria-hidden="true" />
 
       <header className="system-bar relative z-20 flex items-center justify-between gap-4 border-b border-white/15 px-5">
@@ -32,16 +38,20 @@ function App() {
 
       <section className="hero relative">
         <div className="artwork" aria-hidden="true" />
+        
+        {/* Логотип с кликом на главную */}
         <div className="brand-frame relative z-10 mx-auto">
-          <div className="brand-inner">
-            <span className="corner corner-tl" />
-            <span className="corner corner-tr" />
-            <span className="corner corner-bl" />
-            <span className="corner corner-br" />
-            <p className="eyebrow">— // HISTORIC CORE SYSTEM // —</p>
-            <h1>OurArchive</h1>
-            <p className="subtitle">SUB_LEVEL ARCHIVE // EST. 2010</p>
-          </div>
+          <Link to="/" className="block w-full h-full text-inherit no-underline">
+            <div className="brand-inner">
+              <span className="corner corner-tl" />
+              <span className="corner corner-tr" />
+              <span className="corner corner-bl" />
+              <span className="corner corner-br" />
+              <p className="eyebrow">— // HISTORIC CORE SYSTEM // —</p>
+              <h1>OurArchive</h1>
+              <p className="subtitle">SUB_LEVEL ARCHIVE // EST. 2010</p>
+            </div>
+          </Link>
         </div>
 
         <div className="ornament" aria-hidden="true"><span>†</span><i /> <b>■</b> <i /><span>†</span></div>
@@ -49,40 +59,48 @@ function App() {
         <div className="mission-label"><span className="tiny-square" /> SELECT_MISSION:</div>
         <div className="system-status"><span>SYS_STAT [OK]</span><i /><i /><i /></div>
 
-        <nav className="desktop-nav relative z-10 flex flex-wrap items-center justify-center gap-2" aria-label="Основная навигация">
-          {navItems.map((item) => (
-            <button
-              key={item}
-              className={`nav-button ${active === item ? 'is-active' : ''}`}
-              onClick={() => setActive(item)}
-              type="button"
-            >
-              {item}
-            </button>
-          ))}
-        </nav>
+        {/* Навигация (скрывается на странице игры) */}
+        {!isGamePage && (
+          <>
+            <nav className="desktop-nav relative z-10 flex flex-wrap items-center justify-center gap-2" aria-label="Основная навигация">
+              {navItems.map((item) => (
+                <button
+                  key={item}
+                  className={`nav-button ${active === item ? 'is-active' : ''}`}
+                  onClick={() => setActive(item)}
+                  type="button"
+                >
+                  {item}
+                </button>
+              ))}
+            </nav>
 
-        <button className="mobile-menu" type="button" aria-label={mobileOpen ? 'Закрыть меню' : 'Открыть меню'} onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          <span>MISSION_MENU</span>
-        </button>
-        {mobileOpen && (
-          <nav className="mobile-nav" aria-label="Мобильная навигация">
-            {navItems.map((item) => (
-              <button key={item} className={active === item ? 'is-active' : ''} onClick={() => { setActive(item); setMobileOpen(false) }} type="button">
-                {item}
-              </button>
-            ))}
-          </nav>
+            <button className="mobile-menu" type="button" aria-label={mobileOpen ? 'Закрыть меню' : 'Открыть меню'} onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+              <span>MISSION_MENU</span>
+            </button>
+            
+            {mobileOpen && (
+              <nav className="mobile-nav" aria-label="Мобильная навигация">
+                {navItems.map((item) => (
+                  <button key={item} className={active === item ? 'is-active' : ''} onClick={() => { setActive(item); setMobileOpen(false) }} type="button">
+                    {item}
+                  </button>
+                ))}
+              </nav>
+            )}
+          </>
         )}
       </section>
 
-      {/* Выводим плашку каталога строго в этой контентной области */}
-      <section className="content-placeholder" aria-label="Основная область страницы">
-        {active === 'ARCHIVE' && <ArchivePage />}
+      <section className="content-placeholder flex-grow" aria-label="Основная область страницы">
+        <Routes>
+          <Route path="/" element={<ArchivePage activeTab={active} />} />
+          <Route path="/game/:id" element={<GamePage />} />
+        </Routes>
       </section>
 
-      <footer className="site-footer relative z-10">
+      <footer className="site-footer relative z-10 mt-auto">
         <div className="footer-contacts">
           <a href="https://t.me" target="_blank" rel="noreferrer"><Send size={19} strokeWidth={1.7} /><span>@Le_Pukich</span></a>
           <a href="mailto:kk5086617@gmail.com"><Mail size={19} strokeWidth={1.7} /><span>kk5086617@gmail.com</span></a>
@@ -93,4 +111,8 @@ function App() {
   )
 }
 
-createRoot(document.getElementById('root')).render(<App />)
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <AppLayout />
+  </BrowserRouter>
+)

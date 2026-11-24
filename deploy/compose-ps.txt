@@ -1,0 +1,5 @@
+NAME                           IMAGE                                       COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+webarchive-deploy-backend-1    webarchive-deploy-backend                   "docker-entrypoint.s…"   backend    14 seconds ago   Up 7 seconds (healthy)    3001/tcp
+webarchive-deploy-db-1         postgres:17-alpine                          "docker-entrypoint.s…"   db         14 seconds ago   Up 13 seconds (healthy)   5432/tcp
+webarchive-deploy-frontend-1   webarchive-deploy-frontend                  "/docker-entrypoint.…"   frontend   14 seconds ago   Up 13 seconds (healthy)   8080/tcp
+webarchive-deploy-nginx-1      nginxinc/nginx-unprivileged:stable-alpine   "/docker-entrypoint.…"   nginx      13 seconds ago   Up 1 second               127.0.0.1:80->8080/tcp, 127.0.0.1:443->8443/tcp

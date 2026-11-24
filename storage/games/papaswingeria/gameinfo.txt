@@ -1,0 +1,19 @@
+Name:		Papa's Wingeria
+Developer:	Flipline Studios
+Size:		640 x 480
+Screenshots:	http://www.flipline.com/games/papaswingeria/screenshots.html
+Category:	Strategy
+
+Version: 	2.0
+Updated: 	03/09/14
+Includes: 	Major Bug fixes and removal of all Mochi Ads
+
+Description:
+You're in charge of Papa's Wingeria, where you'll need to take orders, fry up wings and things in the fryers, toss your wings in Papa's award-winning sauces, and arrange them just right with garnishes and sides for your loyal customers. New to the series are Custom Workers, where you can create your own character in the game and customize their look with endless possibilities. Change the hair style, skin tone, facial features, posture, accessories, and more! You'll also get dozens of accessories and items of clothing for your custom worker, from the Shop and earned from Mini-Games.
+
+Instructions:
+Use your mouse and follow the in-game instructions.
+
+
+
+

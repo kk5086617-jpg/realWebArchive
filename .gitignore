@@ -9,6 +9,10 @@ build/
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
+**/certs/
+tmp/
 
 # Логи
 *.log

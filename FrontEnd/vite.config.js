@@ -6,8 +6,13 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',
-    globals: true,
-    setupFiles: './src/test/setup.js',
-    css: false,
+    setupFiles: ['./src/test/setup.js'],
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3001',
+      '/covers': 'http://localhost:3001',
+      '/games': 'http://localhost:3001',
+    },
   },
 })
