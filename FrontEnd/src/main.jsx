@@ -48,7 +48,7 @@ function AppLayout() {
               <span className="corner corner-bl" />
               <span className="corner corner-br" />
               <p className="eyebrow">— // HISTORIC CORE SYSTEM // —</p>
-              <h1>OurArchive</h1>
+              {isGamePage ? <p className="brand-title">OurArchive</p> : <h1 className="brand-title">OurArchive</h1>}
               <p className="subtitle">SUB_LEVEL ARCHIVE // EST. 2010</p>
             </div>
           </Link>
