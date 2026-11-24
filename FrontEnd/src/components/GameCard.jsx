@@ -62,7 +62,7 @@ export default function GameCard({ game }) {
 
         <div className="px-3 pt-3 pb-2 text-white flex-grow">
           <div className="mb-2 flex items-start justify-between gap-3">
-            <h3 className="text-lg font-extrabold leading-tight tracking-tight">{title}</h3>
+            <h2 className="text-lg font-extrabold leading-tight tracking-tight">{title}</h2>
             {year && (
               <span className="shrink-0 border border-white/70 bg-black px-2 py-0.5 text-[11px] font-bold">
                 {year} г.

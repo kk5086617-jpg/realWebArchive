@@ -101,7 +101,7 @@ export default function GamePage() {
 
         {/* Комментарии (заглушка) */}
         <div className="p-4 bg-[#0d0d0d] border-t border-white/15">
-          <div className="text-[10px] text-white/40 mb-2">COMMENTS_SECTION // WIP</div>
+          <h2 className="text-[10px] text-white/40 mb-2">COMMENTS_SECTION // WIP</h2>
           <div className="bg-black border border-white/20 p-3 text-[12px] text-white/50 text-center">
             [ Авторизация не реализована. Комментарии появятся позже. ]
           </div>
