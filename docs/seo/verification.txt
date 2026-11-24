@@ -1,0 +1,12 @@
+PASS updated title and production HTML
+PASS robots.txt is a text file with API exclusion and sitemap
+PASS valid XML sitemap: 8 URLs and correct namespace
+PASS sitemap URL https://webarchive.localhost/ -> 200
+PASS sitemap URL https://webarchive.localhost/game/1 -> 200
+PASS sitemap URL https://webarchive.localhost/game/2 -> 200
+PASS sitemap URL https://webarchive.localhost/game/3 -> 200
+PASS sitemap URL https://webarchive.localhost/game/4 -> 200
+PASS sitemap URL https://webarchive.localhost/game/5 -> 200
+PASS sitemap URL https://webarchive.localhost/game/6 -> 200
+PASS sitemap URL https://webarchive.localhost/game/7 -> 200
+PASS API X-Robots-Tag: noindex, nofollow
