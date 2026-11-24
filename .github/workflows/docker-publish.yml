@@ -34,9 +34,28 @@ jobs:
       - name: Run tests
         run: npm test
 
+  backend-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./BackEnd
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ./BackEnd/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Run authentication tests
+        run: npm test
+
   # ─── Job 2: Сборка и публикация образа ───────────
   build-and-push:
-    needs: test  # запускается только если тесты прошли
+    needs: [test, backend-test]
     runs-on: ubuntu-latest
     strategy:
       matrix:

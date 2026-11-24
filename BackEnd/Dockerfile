@@ -3,7 +3,8 @@ WORKDIR /app/BackEnd
 ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
-COPY --chown=node:node index.js db.js ./
+COPY --chown=node:node index.js db.js auth.js profiles.js community.js chatSocket.js ./
+COPY --chown=node:node migrations ./migrations
 USER node
 EXPOSE 3001
 CMD ["node", "index.js"]

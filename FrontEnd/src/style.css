@@ -76,7 +76,7 @@ main { min-height: 100svh; display: flex; flex-direction: column; }
   border: 1px solid #aaa; box-shadow: 0 0 0 1px rgba(255,255,255,.07); font-size: 10px; font-weight: 700;
   transition: background .16s ease, color .16s ease, border-color .16s ease;
 }
-.nav-button:first-child { min-width: 110px; }
+.nav-button.is-enter { min-width: 110px; background: #e8e8e8; color: #050505; border-color: #fff; }
 .nav-button:hover, .nav-button.is-active { background: #e8e8e8; color: #050505; border-color: #fff; }
 .mission-label, .system-status { position: absolute; top: 248px; z-index: 2; color: #aaa; font-size: 9px; }
 .mission-label { left: 2.5%; display: flex; align-items: center; gap: 9px; color: #eee; font-weight: 700; }
@@ -104,6 +104,33 @@ main { min-height: 100svh; display: flex; flex-direction: column; }
 .footer-contacts a:hover { color: #eee; }
 
 .mobile-menu, .mobile-nav { display: none; }
+
+.auth-window { position: relative; z-index: 10; width: min(560px, calc(100% - 32px)); min-height: 286px; margin: 10px auto 48px; border: 1px solid #bcbcbc; background: #19191b; color: #e7e7e7; font: 12px "Courier New", monospace; box-shadow: 3px 3px 0 #050505, 0 12px 35px #0009; }
+.auth-titlebar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 23px; padding: 2px 4px; border-bottom: 1px solid #555; background: #29292b; }
+.auth-titlebar h2 { display: flex; align-items: center; gap: 5px; margin: 0; font-size: 11px; font-weight: bold; }
+.auth-window-controls { display: flex; gap: 3px; }
+.auth-window-controls button { width: 15px; height: 15px; padding: 0; border: 1px solid #aaa; font-size: 11px; line-height: 12px; background: #222; }
+.auth-body { padding: 20px 14px 18px; }
+.auth-fields { display: flex; align-items: flex-start; gap: 16px; }
+.auth-lock { display: grid; place-items: center; width: 54px; height: 56px; flex-shrink: 0; background: #111; }
+.auth-inputs { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 9px 10px; flex: 1; min-width: 0; align-items: center; }
+.auth-inputs label { font-size: 11px; }
+.auth-inputs input { width: 100%; min-width: 0; height: 25px; padding: 3px 7px; border: 1px solid #4d4d50; border-top-color: #080808; border-left-color: #080808; background: #09090b; color: #eee; font: inherit; }
+.auth-inputs input::placeholder { color: #999; }
+.auth-inputs input:focus-visible { outline: 1px solid #eee; outline-offset: 1px; }
+.auth-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; margin-top: 16px; }
+.auth-actions button { padding: 4px 7px; min-height: 25px; border: 1px solid #aaa; border-top-color: #eee; border-left-color: #eee; box-shadow: inset -1px -1px #444; background: #242426; color: #f2f2f2; font-size: 11px; font-weight: bold; }
+.auth-actions .auth-primary { min-width: 72px; }
+.auth-actions button:hover, .auth-window-controls button:hover { background: #e8e8e8; color: #090909; }
+.auth-window button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.auth-window button:disabled, .auth-window input:disabled { opacity: .5; cursor: wait; }
+.auth-divider { height: 2px; margin: 18px 0 14px; background: #080808; border-bottom: 1px solid #303033; }
+.auth-status { margin: 0; padding: 5px 7px; border: 1px solid #333; border-top-color: #080808; background: #09090b; font-size: 10px; color: #aaa; }
+.auth-error { color: #ffb0b0; font-size: 12px; margin: 14px 0 0; }
+.auth-notice { padding: 10px; margin: 12px 0; border: 1px solid #555; color: #ccc; font-size: 11px; line-height: 1.6; }
+.auth-notice button { text-decoration: underline; }
+.auth-hint { margin: 12px 0 0 70px; font-size: 10px; color: #aaa; line-height: 1.6; }
+.auth-profile-name { margin: 0 0 22px; overflow-wrap: anywhere; }
 
 @media (max-width: 900px) {
   .system-left, .system-right { gap: 8px; }
@@ -138,10 +165,107 @@ main { min-height: 100svh; display: flex; flex-direction: column; }
   .mobile-nav button { padding: 13px; color: #eee; background: transparent; border: 0; border-bottom: 1px solid #222; text-align: center; font-size: 10px; }
   .mobile-nav button:last-child { border-bottom: 0; }
   .mobile-nav button:hover, .mobile-nav button.is-active { background: #eee; color: #000; }
+  .mobile-nav button.is-enter { background: #e8e8e8; color: #050505; }
+  .auth-body { padding: 16px 10px; }
+  .auth-fields { gap: 10px; }
+  .auth-lock { width: 32px; height: 48px; }
+  .auth-inputs { grid-template-columns: 58px minmax(0, 1fr); gap: 8px 6px; }
+  .auth-inputs label { font-size: 10px; }
+  .auth-hint { margin-left: 42px; }
   .site-footer { min-height: 170px; }
   .footer-contacts { padding: 42px 18px 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* Public profile and message wall */
+.chat-window { position: relative; z-index: 10; max-width: 920px; margin: 10px auto 48px; padding: 0 16px; }
+.discussion { font: 12px "Courier New", monospace; }
+.discussion .wall-title h2 { margin: 0; font-size: 11px; font-weight: bold; letter-spacing: .06em; }
+.chat-viewport { height: min(52vh, 540px); min-height: 250px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #666 #101012; }
+.is-chat .wall-compose { border-top: 1px solid #333; border-bottom: 0; }
+.discussion textarea { display: block; width: 100%; padding: 10px; border: 1px solid #555; background: #08080a; color: #eee; font: inherit; resize: vertical; }
+.discussion button:focus-visible, .discussion textarea:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.discussion button:disabled { opacity: .4; cursor: default; }
+.discussion-error { padding: 12px; border-bottom: 1px solid #555; color: #ffb0b0; font-size: 11px; }
+.discussion-more { display: block; width: 100%; padding: 12px; border-bottom: 1px solid #333; color: #bbb; font-size: 11px; background: #19191b; }
+.game-download { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 16px; background: #0d0d0f; border-bottom: 1px solid #333; }
+.game-download a { padding: 8px 12px; border: 1px solid #bbb; background: #e3e3e3; color: #111; font-size: 12px; font-weight: bold; }
+.game-download span { font-size: 10px; color: #888; }
+.game-rating { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding: 20px 16px; border-block: 1px solid #444; background: #131315; }
+.game-rating h2 { font-size: 11px; font-weight: bold; letter-spacing: .08em; margin: 0 0 10px; }
+.game-rating p { font-size: 11px; color: #aaa; margin: 6px 0; }
+.rating-stars { display: flex; gap: 6px; }
+.rating-stars button { border: 1px solid #555; padding: 3px 9px; font-size: 22px; background: #09090a; color: #555; }
+.rating-stars button.is-selected { color: #fff; border-color: #ccc; }
+.rating-stars button:hover:not(:disabled) { color: #fff; border-color: #fff; }
+.rating-stars button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.rating-stars button:disabled { cursor: default; }
+.game-rating > .auth-error, .game-rating > .profile-notice { width: 100%; }
+.game-rating a, .discussion .wall-guest a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) { .rating-stars button { padding: 3px 7px; } .chat-viewport { height: 48vh; } }
+.profile-window { position: relative; z-index: 10; width: min(820px, calc(100% - 32px)); margin: 10px auto 48px; border: 1px solid #aaa; background: #18181a; box-shadow: 4px 4px #050505, 0 15px 40px #0009; font: 12px "Courier New", monospace; }
+.profile-body { padding: 18px; }
+.profile-toolbar, .profile-buttons, .wall-compose-footer, .wall-post-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.profile-toolbar { justify-content: space-between; margin-bottom: 20px; }
+.profile-window-label { font-size: 10px; letter-spacing: .08em; color: #999; }
+.profile-buttons button, .wall-compose-footer button, .profile-upload { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #777; padding: 7px 10px; background: #242426; color: #eee; font-size: 11px; cursor: pointer; }
+.profile-window button:disabled, .profile-upload:has(input:disabled) { opacity: .4; cursor: default; }
+.profile-window button:hover:not(:disabled), .profile-upload:hover { border-color: #eee; }
+.profile-window :is(button,input,textarea,a):focus-visible, .profile-upload:focus-within { outline: 2px solid #eee; outline-offset: 3px; }
+.profile-summary, .profile-edit { display: flex; gap: 24px; padding: 4px 0 24px; }
+.profile-avatar { display: grid; place-items: center; width: 120px; height: 120px; flex-shrink: 0; border: 1px solid #666; outline: 3px solid #101012; outline-offset: 3px; color: #bcbcbc; background: #09090b; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-avatar.is-small { width: 36px; height: 36px; outline: 0; }
+.profile-info { min-width: 0; flex: 1; }
+.profile-info h3 { font: bold 25px Arial, sans-serif; margin: 7px 0 12px; overflow-wrap: anywhere; }
+.profile-bio { white-space: pre-wrap; overflow-wrap: anywhere; color: #aaa; line-height: 1.7; margin: 0 0 16px; }
+.profile-edit-avatar { display: flex; flex-direction: column; align-items: flex-start; gap: 13px; width: 150px; flex-shrink: 0; }
+.profile-edit-avatar > button { font-size: 10px; color: #aaa; text-decoration: underline; }
+.profile-edit-fields { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 9px; }
+.profile-edit-fields label { display: flex; justify-content: space-between; color: #bbb; }
+.profile-edit-fields label span { color: #666; font-size: 10px; }
+.profile-window :is(input:not([type=file]),textarea) { width: 100%; min-width: 0; border: 1px solid #444; background: #09090b; color: #eee; padding: 9px; font: inherit; }
+.profile-window textarea { resize: vertical; }
+.profile-upload { position: relative; overflow: hidden; }
+.profile-upload input[type=file] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.profile-notice { border-left: 2px solid #aaa; padding: 8px 12px; background: #242426; margin: 0 0 16px; }
+.profile-wall { border: 1px solid #4d4d50; background: #0a0a0c; }
+.wall-title { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 11px 14px; border-bottom: 1px solid #444; background: #222224; }
+.wall-title h3 { font-size: 11px; font-weight: bold; margin: 0; letter-spacing: .06em; }
+.wall-title > span { font-size: 9px; color: #888; letter-spacing: .1em; }
+.wall-compose { padding: 14px; border-bottom: 1px solid #333; }
+.wall-compose textarea { display: block; min-height: 80px; }
+.wall-compose-footer { margin-top: 10px; justify-content: space-between; }
+.wall-compose-footer > span { margin-left: auto; color: #777; font-size: 10px; }
+.wall-compose-footer button[type=submit] { background: #ddd; color: #111; border-color: #ddd; }
+.wall-attachment { position: relative; display: inline-block; margin-top: 10px; }
+.wall-attachment img { max-height: 120px; max-width: 100%; border: 1px solid #555; }
+.wall-attachment button { position: absolute; top: 4px; right: 4px; padding: 4px; background: #111; border: 1px solid #888; }
+.wall-post { display: flex; gap: 12px; padding: 18px 14px; border-bottom: 1px solid #29292c; }
+.wall-post:last-child { border-bottom: 0; }
+.wall-post-content { flex: 1; min-width: 0; }
+.wall-post-meta > a { font-weight: bold; color: #eee; overflow-wrap: anywhere; }
+.wall-post-meta time { font-size: 10px; color: #777; }
+.wall-post-text { white-space: pre-wrap; overflow-wrap: anywhere; color: #ccc; line-height: 1.7; margin: 10px 0 0; }
+.wall-post-image { max-width: 100%; max-height: 360px; object-fit: contain; display: block; border: 1px solid #444; margin-top: 12px; }
+.wall-delete { display: flex; gap: 10px; margin-left: auto; color: #999; font-size: 10px; }
+.wall-more { padding: 14px; justify-content: center; border-top: 1px solid #333; }
+.profile-empty { padding: 30px 12px; text-align: center; color: #777; font-size: 11px; line-height: 2; }
+.profile-empty span { font-size: 10px; color: #555; }
+.wall-guest { padding: 18px; margin: 0; border-bottom: 1px solid #333; font-size: 11px; color: #aaa; }
+@media (max-width: 600px) {
+  .profile-body { padding: 12px; }
+  .profile-summary, .profile-edit { gap: 16px; }
+  .profile-avatar { width: 80px; height: 80px; }
+  .profile-edit { flex-direction: column; }
+  .profile-edit-avatar { width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .profile-info h3 { font-size: 21px; }
+  .wall-compose-footer { gap: 8px; }
+  .wall-compose-footer > span { margin-left: 0; }
+  .wall-post { gap: 9px; padding: 14px 10px; }
+  .wall-post-meta { gap: 6px; }
+  .wall-post-meta time { width: 100%; }
 }

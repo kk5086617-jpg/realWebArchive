@@ -1,26 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import Discussion from './Discussion'
+import GameRating from './GameRating'
 
 export default function GamePage() {
   const { id } = useParams()
   const [game, setGame] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const updateRating = useCallback(average => setGame(current => current ? { ...current, rate: average } : current), [])
 
   useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
     fetch(`/api/games/${id}`)
       .then(r => {
         if (!r.ok) throw new Error('Игра не найдена')
         return r.json()
       })
       .then(data => {
+        if (cancelled) return
         setGame(data)
         setLoading(false)
       })
       .catch(e => {
+        if (cancelled) return
         setError(e.message)
         setLoading(false)
       })
+    return () => { cancelled = true }
   }, [id])
 
   if (loading) return <div className="py-20 text-center text-zinc-500 font-mono text-xs animate-pulse">[ LOADING_GAME_DATA... ]</div>
@@ -85,6 +94,7 @@ export default function GamePage() {
         </div>
 
         {/* Плеер Ruffle */}
+        <div className="game-download"><a href={`/api/games/${id}/download`} download>[ ↓ Скачать SWF ]</a><span>Оригинальный файл игры</span></div>
         <div className="p-4 bg-black flex justify-center">
           {swfUrl ? (
             <div className="w-full aspect-video bg-[#1a1a1a] border border-white/20 flex items-center justify-center relative">
@@ -99,13 +109,8 @@ export default function GamePage() {
           )}
         </div>
 
-        {/* Комментарии (заглушка) */}
-        <div className="p-4 bg-[#0d0d0d] border-t border-white/15">
-          <h2 className="text-[10px] text-white/40 mb-2">COMMENTS_SECTION // WIP</h2>
-          <div className="bg-black border border-white/20 p-3 text-[12px] text-white/50 text-center">
-            [ Авторизация не реализована. Комментарии появятся позже. ]
-          </div>
-        </div>
+        <GameRating gameId={id} onChange={updateRating} />
+        <div className="p-4"><Discussion key={id} endpoint={`/api/games/${id}/comments`} /></div>
 
       </div>
     </div>

@@ -3,6 +3,10 @@ import cors from 'cors';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getPool } from './db.js';
+import { createAuthRouter, initializeAuth } from './auth.js';
+import { createProfilesRouter } from './profiles.js';
+import { createCommunityRouter } from './community.js';
+import { attachChatSocket } from './chatSocket.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -11,7 +15,11 @@ if (process.env.TRUST_PROXY === '1') app.set('trust proxy', 1);
 app.disable('x-powered-by');
 
 app.use(cors());
+app.use('/api/profiles', express.json({ limit: '4mb' }), createProfilesRouter(getPool()));
+app.use('/api/chat', express.json({ limit: '4mb' }));
 app.use(express.json());
+app.use('/api/auth', createAuthRouter(getPool()));
+app.use('/api', createCommunityRouter(getPool()));
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -35,12 +43,14 @@ app.get('/api/games', async (req, res) => {
   const limit = Math.max(1, Math.min(100, parseInt(req.query.limit) || 20));
   const offset = (page - 1) * limit;
   const q = req.query.q ? `%${req.query.q}%` : '%';
-  const filterQuery = req.query.filters ? req.query.filters.split(',') : [];
+  const filterQuery = typeof req.query.filters === 'string'
+    ? [...new Set(req.query.filters.split(',').map(name => name.trim()).filter(Boolean))]
+    : [];
 
   try {
     const pool = getPool();
     let queryText = `
-      SELECT appID AS id, title, description, imageURL, sfwURL, developer, uploads, rate, releaseDate
+      SELECT appID AS id, title, description, imageURL, sfwURL, developer, uploads, COALESCE((SELECT round(avg(value),1) FROM archive_game_ratings r WHERE r.game_id=applications.appID),0) AS rate, releaseDate
       FROM applications
       WHERE title ILIKE $1
     `;
@@ -53,6 +63,8 @@ app.get('/api/games', async (req, res) => {
           SELECT fa.appID FROM filter_app fa 
           JOIN filters f ON f.filterID = fa.filterID 
           WHERE f.name = ANY($${paramIndex})
+          GROUP BY fa.appID
+          HAVING COUNT(DISTINCT f.name) = cardinality($${paramIndex}::text[])
         )
       `;
       queryParams.push(filterQuery);
@@ -73,6 +85,8 @@ app.get('/api/games', async (req, res) => {
           SELECT fa.appID FROM filter_app fa 
           JOIN filters f ON f.filterID = fa.filterID 
           WHERE f.name = ANY($2)
+          GROUP BY fa.appID
+          HAVING COUNT(DISTINCT f.name) = cardinality($2::text[])
         )
       `;
       countParams.push(filterQuery);
@@ -118,7 +132,7 @@ app.get('/api/games/:id', async (req, res) => {
   try {
     const pool = getPool();
     const result = await pool.query(`
-      SELECT appID AS id, title, description, imageURL, sfwURL, developer, uploads, rate, releaseDate
+      SELECT appID AS id, title, description, imageURL, sfwURL, developer, uploads, COALESCE((SELECT round(avg(value),1) FROM archive_game_ratings r WHERE r.game_id=applications.appID),0) AS rate, releaseDate
       FROM applications WHERE appID = $1
     `, [req.params.id]);
       
@@ -165,4 +179,11 @@ app.get('/api/filters', async (_req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Backend: http://localhost:${PORT}`));
+try {
+  await initializeAuth(getPool());
+  const server = app.listen(PORT, () => console.log(`Backend: http://localhost:${PORT}`));
+  attachChatSocket(server);
+} catch (err) {
+  console.error('Failed to initialize database:', err.code || err.name);
+  process.exit(1);
+}

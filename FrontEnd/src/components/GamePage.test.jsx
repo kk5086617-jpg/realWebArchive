@@ -7,9 +7,9 @@ afterEach(() => vi.unstubAllGlobals())
 
 describe('GamePage', () => {
   it('загружает SWF через тот же домен без HTTP-адреса localhost', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({
+    vi.stubGlobal('fetch', vi.fn(async (url) => ({
       ok: true,
-      json: async () => ({ id: 2, title: 'Jacksmith', sfwURL: 'jacksmith/jacksmith.swf' }),
+      json: async () => url.endsWith('/rating') ? { average: null, count: 0, mine: null } : url.endsWith('/comments') ? { posts: [], nextCursor: null } : { id: 2, title: 'Jacksmith', sfwURL: 'jacksmith/jacksmith.swf' },
     })))
     const { container } = render(
       <MemoryRouter initialEntries={['/game/2']}>
